@@ -199,10 +199,10 @@ int main(int argc, char *argv[]) {
 		cerr<<"Not found!"<<endl;
 	for (int i=0; i<answer.size(); i++)
 	{
-		cerr<<answer[i]->to_code().pos<<endl;
-		cerr<<answer[i]->to_program()->accept(e_train,{require_(double, "accuracy")})<<endl;
+		// cerr<<answer[i]->to_code().pos<<endl;
+		// cerr<<answer[i]->to_program()->accept(e_train,{require_(double, "accuracy")})<<endl;
 
-		cout<<answer[i]->to_code().pos<<" "<<std::fixed
+		cout<<answer[i]->to_code(2).pos<<" "<<std::fixed
 						<<static_cast<int>(e_train->threshold)<<" "
 						<<static_cast<int>(e_train->indistinguishable_is_negative)<<endl;
 

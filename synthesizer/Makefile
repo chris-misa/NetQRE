@@ -10,7 +10,7 @@ train: train-netqre
 
 INCLUDE_PATH = ../../rubify
 
-CC=g++-9
+CC=g++ -g
 STD=--std=c++2a
 
 SRC = core/*pp

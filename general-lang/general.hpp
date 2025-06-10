@@ -109,7 +109,15 @@ class GeneralExampleHandle: public GeneralExample{
 	}
 };
 
-
+static string
+multiply_str(size_t n, string str)
+{
+  string res("");
+  for (int i = 0; i < n; i++) {
+    res = res + str;
+  }
+  return res;
+}
 
 /* somehow build source code when initializing
  * accept() will feed the source code and input to external interpreter */
@@ -196,7 +204,7 @@ class GeneralSyntaxTree : public IESyntaxTree {
 	}
 
 
-	AbstractCode to_code() {
+	AbstractCode to_code(size_t indent = 0, size_t level = 0) {
 
 /*
 		string encode;
@@ -246,34 +254,34 @@ class GeneralSyntaxTree : public IESyntaxTree {
 			int j = 0;
 			bool completable_flag = true;
 
-			pos = lsign + root->get_type()->name + deli;
+			pos = lsign + root->get_type()->name + deli + (indent != 0 ? "\n" : "");
 			neg = pos;
 
 			for (int i=0; i<rhs->subexp_full.size(); i++)	
 			{
 				if (rhs->subexp_full[i]->is_functional()) 
 				{
-					auto sub = (std::static_pointer_cast<GeneralSyntaxTree>(subtree[j])->to_code());
+					auto sub = (std::static_pointer_cast<GeneralSyntaxTree>(subtree[j])->to_code(indent, level + 1));
 					if (!sub.completable)
 					{
 						completable_flag = false;
 						break;
 					}
-					pos = pos + sub.pos;
-					neg = neg + sub.neg;
+					pos = pos + multiply_str(indent * level, string(" ")) + sub.pos + deli + (indent != 0 ? "\n" : "");
+					neg = neg + multiply_str(indent * level, string(" ")) + sub.neg + deli + (indent != 0 ? "\n" : "");
 					j++;
 				}
 				else {
-					pos = pos + lsign + (rhs->subexp_full[i]->name) + deli + rsign;
-					neg = neg + lsign + (rhs->subexp_full[i]->name) + deli + rsign;
+					pos = pos + multiply_str(indent * level, string(" ")) + lsign + (rhs->subexp_full[i]->name) + deli + rsign + deli + (indent != 0 ? "\n" : "");
+					neg = neg + multiply_str(indent * level, string(" ")) + lsign + (rhs->subexp_full[i]->name) + deli + rsign + deli + (indent != 0 ? "\n" : "");
 				}
 
-				pos += deli;
-				neg += deli;
+				// pos += deli;
+				// neg += deli;
 			}
 
-			pos += rsign;
-			neg += rsign;
+			pos += multiply_str(level > 0 ? indent * (level - 1) : 0, string(" ")) + rsign;
+			neg += multiply_str(level > 0 ? indent * (level - 1) : 0, string(" ")) + rsign;
 
 			if (!completable_flag)
 			{
